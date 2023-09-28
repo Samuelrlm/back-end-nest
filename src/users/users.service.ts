@@ -46,7 +46,10 @@ export class UsersService {
   }
 
   async update(id: string, user: User): Promise<User> {
-    await this.userModel.findByIdAndUpdate(id, user);
+    await this.userModel.findByIdAndUpdate(id, user, {
+      new: true,
+      runValidators: true,
+    });
     const updatedUser = await this.userModel.findById(id);
     const removePassword = updatedUser.toObject();
     delete removePassword.password;
@@ -55,8 +58,6 @@ export class UsersService {
   }
 
   async delete(id: string): Promise<void> {
-    await this.userModel.findByIdAndDelete(id);
-
-    return;
+    return await this.userModel.findByIdAndDelete(id);
   }
 }
