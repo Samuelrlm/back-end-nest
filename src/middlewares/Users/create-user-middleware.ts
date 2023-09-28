@@ -1,8 +1,16 @@
-import { NestMiddleware } from '@nestjs/common';
+import { Injectable, NestMiddleware } from '@nestjs/common';
+import { InjectModel } from '@nestjs/mongoose';
 import { NextFunction, Request, Response } from 'express';
+import mongoose from 'mongoose';
+import { User, permissionLevel } from 'src/users/schemas/user.schema';
 
+@Injectable()
 export class CreateUserMiddleware implements NestMiddleware {
-  use(req: Request, res: Response, next: NextFunction) {
+  constructor(
+    @InjectModel(User.name)
+    private userModel: mongoose.Model<User>,
+  ) {}
+  async use(req: Request, res: Response, next: NextFunction) {
     if (!req.body.name) {
       return res.status(400).send({ error: 'Name is required' });
     }
@@ -15,6 +23,18 @@ export class CreateUserMiddleware implements NestMiddleware {
     if (!req.body.permissionLevel) {
       return res.status(400).send({ error: 'Permission level is required' });
     }
+    if (!Object.values(permissionLevel).includes(req.body.permissionLevel)) {
+      return res.status(400).send({ error: 'Invalid permission level' });
+    }
+
+    const existingEmail = await this.userModel.findOne({
+      email: req.body.email,
+    });
+
+    if (existingEmail) {
+      return res.status(400).send({ error: 'Email already exists' });
+    }
+
     next();
   }
 }
