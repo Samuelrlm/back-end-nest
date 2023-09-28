@@ -12,6 +12,7 @@ import { CreateUserMiddleware } from 'src/middlewares/Users/create-user-middlewa
 import { GetUserByIdMiddleware } from 'src/middlewares/Users/get-user-by-id-middleware';
 import { GetUserByEmailMiddleware } from 'src/middlewares/Users/get-user-by-email-midleware';
 import { UpdateUserMidleWare } from 'src/middlewares/Users/update-user-midleware';
+import { DeleteUserMidleWare } from 'src/middlewares/Users/delete-user-middleware';
 
 @Module({
   imports: [MongooseModule.forFeature([{ name: 'User', schema: UserSchema }])],
@@ -35,5 +36,9 @@ export class UsersModule implements NestModule {
     consumer
       .apply(UpdateUserMidleWare)
       .forRoutes({ path: 'users/:id', method: RequestMethod.PUT });
+
+    consumer
+      .apply(DeleteUserMidleWare)
+      .forRoutes({ path: 'users/:id', method: RequestMethod.DELETE });
   }
 }
