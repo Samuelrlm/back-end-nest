@@ -10,6 +10,7 @@ import {
 import { UsersService } from './users.service';
 import { User } from './schemas/user.schema';
 import { CreatUserDto } from './dto/create-user-dto';
+import { UpdateUserDto } from './dto/update-user-dto';
 
 @Controller('users')
 export class UsersController {
@@ -49,7 +50,7 @@ export class UsersController {
     @Param('id')
     id: string,
     @Body()
-    user: CreatUserDto,
+    user: UpdateUserDto,
   ): Promise<User> {
     return this.usersService.update(id, user);
   }
