@@ -52,7 +52,7 @@ export class UsersController {
     @Param('id')
     id: string,
     @Body()
-    user: CreatUserDto,
+    user: UpdateUserDto,
   ): Promise<User> {
     return this.usersService.update(id, user);
   }
