@@ -12,7 +12,7 @@ export enum permissionLevel {
 export class User {
   @Prop()
   name: string;
-  @Prop()
+  @Prop({ unique: [true, 'Duplicate email'] })
   email: string;
   @Prop()
   password: string;

@@ -2,7 +2,7 @@ import { Injectable, NestMiddleware } from '@nestjs/common';
 import { InjectModel } from '@nestjs/mongoose';
 import { NextFunction, Request, Response } from 'express';
 import mongoose from 'mongoose';
-import { User, permissionLevel } from 'src/users/schemas/user.schema';
+import { User, permissionLevel } from 'src/schemas/user.schema';
 
 @Injectable()
 export class CreateUserMiddleware implements NestMiddleware {

@@ -1,5 +1,6 @@
 import { IsNotEmpty, IsString, IsEnum } from 'class-validator';
-import { permissionLevel } from '../schemas/user.schema';
+import { permissionLevel } from 'src/schemas/user.schema';
+
 export class CreatUserDto {
   @IsNotEmpty()
   @IsString()
