@@ -17,4 +17,8 @@ export class UpdateUserDto {
   @IsOptional()
   @IsEnum(permissionLevel, { message: 'Invalid permission level' })
   readonly permissionLevel: permissionLevel;
+
+  @IsOptional()
+  @IsString()
+  readonly createdBy: string;
 }

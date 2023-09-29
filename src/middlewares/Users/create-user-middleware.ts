@@ -2,7 +2,7 @@ import { Injectable, NestMiddleware } from '@nestjs/common';
 import { InjectModel } from '@nestjs/mongoose';
 import { NextFunction, Request, Response } from 'express';
 import mongoose from 'mongoose';
-import { User, permissionLevel } from 'src/schemas/user.schema';
+import { User, permissionLevel } from '../../schemas/user.schema';
 
 @Injectable()
 export class CreateUserMiddleware implements NestMiddleware {
@@ -33,6 +33,18 @@ export class CreateUserMiddleware implements NestMiddleware {
 
     if (existingEmail) {
       return res.status(400).send({ error: 'Email already exists' });
+    }
+
+    const createdById = req.body.createdBy;
+
+    if (!mongoose.Types.ObjectId.isValid(createdById)) {
+      return res.status(400).send({ error: 'Invalid created by id' });
+    }
+
+    const createdBy = await this.userModel.findById(createdById);
+
+    if (!createdBy) {
+      return res.status(400).send({ error: 'Created by user not found' });
     }
 
     next();

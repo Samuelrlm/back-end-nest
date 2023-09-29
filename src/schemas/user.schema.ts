@@ -18,6 +18,8 @@ export class User {
   password: string;
   @Prop()
   permissionLevel: permissionLevel;
+  @Prop({ default: 'system' })
+  createdBy: string;
 }
 
 export const UserSchema = SchemaFactory.createForClass(User);

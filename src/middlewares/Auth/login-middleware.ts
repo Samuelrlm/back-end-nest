@@ -6,7 +6,7 @@ import {
 import { InjectModel } from '@nestjs/mongoose';
 import { NextFunction, Request, Response } from 'express';
 import mongoose from 'mongoose';
-import { User } from 'src/schemas/user.schema';
+import { User } from '../../schemas/user.schema';
 import * as bcrypt from 'bcryptjs';
 
 @Injectable()

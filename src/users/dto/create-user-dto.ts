@@ -24,4 +24,8 @@ export class CreatUserDto {
   @IsNotEmpty()
   @IsEnum(permissionLevel, { message: 'Invalid permission level' })
   readonly permissionLevel: permissionLevel;
+
+  @IsNotEmpty()
+  @IsString()
+  readonly createdBy: string;
 }
