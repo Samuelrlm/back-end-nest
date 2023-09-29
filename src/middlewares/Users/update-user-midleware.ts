@@ -12,18 +12,50 @@ export class UpdateUserMidleWare implements NestMiddleware {
   ) {}
   async use(req: Request, res: Response, next: NextFunction) {
     const userId = req.params.id;
+    const executorId = req.query.executorId as string;
 
-    const validFields = ['name', 'email', 'password', 'permissionLevel'];
+    if (!executorId) {
+      return res.status(400).send({ error: 'Missing executor id' });
+    }
+
+    if (!mongoose.Types.ObjectId.isValid(executorId)) {
+      return res.status(400).send({ error: 'Invalid executor id' });
+    }
+
+    const validFields = ['name', 'email', 'permissionLevel'];
     const invalidFields = Object.keys(req.body).filter(
       (field) => !validFields.includes(field),
     );
 
+    const existingId = await this.userModel.findById(userId);
+    const existingExecutorId = await this.userModel.findById(executorId);
+
+    if (!existingId) {
+      return res.status(404).send({ error: 'User not found' });
+    }
+
+    if (!existingExecutorId) {
+      return res.status(404).send({ error: 'Executor not found' });
+    }
+
     if (!mongoose.Types.ObjectId.isValid(userId)) {
       return res.status(400).send({ error: 'Invalid id' });
     }
+
     if (!userId) {
       return res.status(400).send({ error: 'Id is required' });
     }
+
+    if (userId === executorId) {
+      return res.status(400).send({ error: 'Cannot update yourself' });
+    }
+
+    if (existingExecutorId.permissionLevel < permissionLevel.EDITOR) {
+      return res
+        .status(403)
+        .send({ error: 'You dont have permission for update user' });
+    }
+
     if (Object.keys(req.body).length === 0) {
       return res.status(400).send({ error: 'Body is required' });
     }
@@ -38,25 +70,11 @@ export class UpdateUserMidleWare implements NestMiddleware {
     if (req.body.email && typeof req.body.email !== 'string') {
       return res.status(400).send({ error: 'Email must be a string' });
     }
-    if (req.body.password && typeof req.body.password !== 'string') {
-      return res.status(400).send({ error: 'Password must be a string' });
-    }
     if (
       req.body.permissionLevel &&
       !Object.values(permissionLevel).includes(req.body.permissionLevel)
     ) {
       return res.status(400).send({ error: 'Invalid permission level' });
-    }
-    if (req.body.email) {
-      const email = req.body.email;
-
-      const existingEmail = await this.userModel.findOne({
-        email: email,
-      });
-
-      if (existingEmail) {
-        return res.status(400).send({ error: 'Email already exists' });
-      }
     }
 
     next();

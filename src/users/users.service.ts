@@ -3,6 +3,7 @@ import { InjectModel } from '@nestjs/mongoose';
 import { User } from '../schemas/user.schema';
 import mongoose from 'mongoose';
 import { Query } from 'express-serve-static-core';
+
 @Injectable()
 export class UsersService {
   constructor(
@@ -33,52 +34,46 @@ export class UsersService {
       .limit(resPerPage)
       .skip(skip);
 
-    const removePassword = users.map((user) => {
-      const userObj = user.toObject();
-      delete userObj.password;
-      return userObj;
-    });
-
-    return removePassword;
+    return users;
   }
 
   async create(user: User): Promise<User> {
     const res = await this.userModel.create(user);
-    const removePassword = res.toObject();
-    delete removePassword.password;
 
-    return removePassword;
+    return res;
   }
 
   async findById(id: string): Promise<User> {
     const user = await this.userModel.findById(id);
-    const removePassword = user.toObject();
-    delete removePassword.password;
 
-    return removePassword;
+    return user;
   }
 
   async findByEmail(email: string): Promise<User> {
     const user = await this.userModel.findOne({ email: email });
-    const removePassword = user.toObject();
-    delete removePassword.password;
 
-    return removePassword;
+    return user;
   }
 
-  async update(id: string, user: User): Promise<User> {
-    await this.userModel.findByIdAndUpdate(id, user, {
-      new: true,
-      runValidators: true,
-    });
+  async update(id: string, user: User, executorId: string): Promise<User> {
+    if (!executorId) {
+      throw new NotFoundException('Missing executor id');
+    } else {
+      await this.userModel.findByIdAndUpdate(id, user, {
+        new: true,
+        runValidators: true,
+      });
+    }
     const updatedUser = await this.userModel.findById(id);
-    const removePassword = updatedUser.toObject();
-    delete removePassword.password;
 
-    return removePassword;
+    return updatedUser;
   }
 
-  async delete(id: string): Promise<void> {
-    return await this.userModel.findByIdAndDelete(id);
+  async delete(id: string, executorId: string): Promise<void> {
+    if (!executorId) {
+      throw new NotFoundException('Missing executor id');
+    } else {
+      return await this.userModel.findByIdAndDelete(id);
+    }
   }
 }

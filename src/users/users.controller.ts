@@ -56,20 +56,24 @@ export class UsersController {
   @Put(':id')
   @UseGuards(AuthGuard())
   async updateUser(
+    @Query('executorId')
+    executorId: string,
     @Param('id')
     id: string,
     @Body()
     user: UpdateUserDto,
   ): Promise<User> {
-    return this.usersService.update(id, user);
+    return this.usersService.update(id, user as User, executorId);
   }
 
   @Delete(':id')
   @UseGuards(AuthGuard())
   async deleteUser(
+    @Query('executorId')
+    executorId: string,
     @Param('id')
     id: string,
   ): Promise<void> {
-    return this.usersService.delete(id);
+    return this.usersService.delete(id, executorId);
   }
 }
