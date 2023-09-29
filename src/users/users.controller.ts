@@ -10,11 +10,11 @@ import {
   UseGuards,
 } from '@nestjs/common';
 import { UsersService } from './users.service';
-import { User } from '../schemas/user.schema';
 import { UpdateUserDto } from './dto/update-user-dto';
 import { Query as ExpressQuery } from 'express-serve-static-core';
 import { CreatUserDto } from './dto/create-user-dto';
 import { AuthGuard } from '@nestjs/passport';
+import { User } from '../schemas/user.schema';
 
 @Controller('users')
 export class UsersController {
