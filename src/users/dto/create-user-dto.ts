@@ -7,7 +7,7 @@ import {
 } from 'class-validator';
 import { permissionLevel } from 'src/schemas/user.schema';
 
-export class SignUpDto {
+export class CreatUserDto {
   @IsNotEmpty()
   @IsString()
   readonly name: string;

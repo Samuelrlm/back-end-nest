@@ -49,18 +49,13 @@ export class UpdateUserMidleWare implements NestMiddleware {
     }
     if (req.body.email) {
       const email = req.body.email;
-      const emailIncludesAt = email.includes('@');
 
-      if (!emailIncludesAt) {
-        return res.status(400).send({ error: 'Email must be a valid email' });
-      } else {
-        const existingEmail = await this.userModel.findOne({
-          email: req.body.email,
-        });
+      const existingEmail = await this.userModel.findOne({
+        email: email,
+      });
 
-        if (existingEmail) {
-          return res.status(400).send({ error: 'Email already exists' });
-        }
+      if (existingEmail) {
+        return res.status(400).send({ error: 'Email already exists' });
       }
     }
 
