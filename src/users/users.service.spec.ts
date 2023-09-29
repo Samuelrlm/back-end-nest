@@ -15,7 +15,6 @@ describe('UsersService', () => {
     find: jest.fn(),
     create: jest.fn(),
     findById: jest.fn(),
-    updateById: jest.fn(),
   };
 
   beforeEach(async () => {
