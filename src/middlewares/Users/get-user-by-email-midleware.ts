@@ -2,7 +2,7 @@ import { Injectable, NestMiddleware, NotFoundException } from '@nestjs/common';
 import { InjectModel } from '@nestjs/mongoose';
 import { NextFunction, Request, Response } from 'express';
 import mongoose from 'mongoose';
-import { User } from 'src/schemas/user.schema';
+import { User } from '../../schemas/user.schema';
 
 @Injectable()
 export class GetUserByEmailMiddleware implements NestMiddleware {

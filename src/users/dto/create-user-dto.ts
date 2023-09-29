@@ -5,7 +5,7 @@ import {
   IsEmail,
   MinLength,
 } from 'class-validator';
-import { permissionLevel } from 'src/schemas/user.schema';
+import { permissionLevel } from '../../schemas/user.schema';
 
 export class CreatUserDto {
   @IsNotEmpty()
@@ -24,4 +24,8 @@ export class CreatUserDto {
   @IsNotEmpty()
   @IsEnum(permissionLevel, { message: 'Invalid permission level' })
   readonly permissionLevel: permissionLevel;
+
+  @IsNotEmpty()
+  @IsString()
+  readonly createdBy: string;
 }

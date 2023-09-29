@@ -7,23 +7,27 @@ import {
   Post,
   Put,
   Query,
+  UseGuards,
 } from '@nestjs/common';
 import { UsersService } from './users.service';
-import { User } from '../schemas/user.schema';
 import { UpdateUserDto } from './dto/update-user-dto';
 import { Query as ExpressQuery } from 'express-serve-static-core';
 import { CreatUserDto } from './dto/create-user-dto';
+import { AuthGuard } from '@nestjs/passport';
+import { User } from '../schemas/user.schema';
 
 @Controller('users')
 export class UsersController {
   constructor(private usersService: UsersService) {}
 
   @Get()
+  @UseGuards(AuthGuard())
   async getAllUsers(@Query() query: ExpressQuery): Promise<User[]> {
     return this.usersService.findAll(query);
   }
 
   @Post()
+  @UseGuards(AuthGuard())
   async createUser(
     @Body()
     user: CreatUserDto,
@@ -32,6 +36,7 @@ export class UsersController {
   }
 
   @Get(':id')
+  @UseGuards(AuthGuard())
   async getUser(
     @Param('id')
     id: string,
@@ -40,6 +45,7 @@ export class UsersController {
   }
 
   @Get('email/:email')
+  @UseGuards(AuthGuard())
   async getUserByEmail(
     @Param('email')
     email: string,
@@ -48,6 +54,7 @@ export class UsersController {
   }
 
   @Put(':id')
+  @UseGuards(AuthGuard())
   async updateUser(
     @Param('id')
     id: string,
@@ -58,6 +65,7 @@ export class UsersController {
   }
 
   @Delete(':id')
+  @UseGuards(AuthGuard())
   async deleteUser(
     @Param('id')
     id: string,

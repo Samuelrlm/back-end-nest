@@ -1,5 +1,5 @@
 import { IsOptional, IsString, IsEnum } from 'class-validator';
-import { permissionLevel } from 'src/schemas/user.schema';
+import { permissionLevel } from '../../schemas/user.schema';
 
 export class UpdateUserDto {
   @IsOptional()
@@ -17,4 +17,8 @@ export class UpdateUserDto {
   @IsOptional()
   @IsEnum(permissionLevel, { message: 'Invalid permission level' })
   readonly permissionLevel: permissionLevel;
+
+  @IsOptional()
+  @IsString()
+  readonly createdBy: string;
 }
