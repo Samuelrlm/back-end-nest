@@ -1,5 +1,5 @@
 import { IsOptional, IsString, IsEnum } from 'class-validator';
-import { permissionLevel } from 'src/schemas/user.schema';
+import { permissionLevel } from '../../schemas/user.schema';
 
 export class UpdateUserDto {
   @IsOptional()

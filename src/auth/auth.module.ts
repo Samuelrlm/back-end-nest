@@ -7,12 +7,13 @@ import {
 import { AuthController } from './auth.controller';
 import { AuthService } from './auth.service';
 import { MongooseModule } from '@nestjs/mongoose';
-import { UserSchema } from 'src/schemas/user.schema';
+import { UserSchema } from '../schemas/user.schema';
 import { PassportModule } from '@nestjs/passport';
 import { JwtModule } from '@nestjs/jwt';
 import { ConfigService } from '@nestjs/config';
-import { SignUpMidleware } from 'src/middlewares/Auth/signup-middleware';
-import { LoginMidleware } from 'src/middlewares/Auth/login-middleware';
+import { SignUpMidleware } from '../middlewares/Auth/signup-middleware';
+import { LoginMidleware } from '../middlewares/Auth/login-middleware';
+import { JwtStrategy } from './jwt.strategy';
 
 @Module({
   imports: [
@@ -31,7 +32,8 @@ import { LoginMidleware } from 'src/middlewares/Auth/login-middleware';
     MongooseModule.forFeature([{ name: 'User', schema: UserSchema }]),
   ],
   controllers: [AuthController],
-  providers: [AuthService],
+  providers: [AuthService, JwtStrategy],
+  exports: [JwtStrategy, PassportModule],
 })
 export class AuthModule implements NestModule {
   configure(consumer: MiddlewareConsumer) {

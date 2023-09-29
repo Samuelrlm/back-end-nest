@@ -8,14 +8,18 @@ import { UsersController } from './users.controller';
 import { UsersService } from './users.service';
 import { MongooseModule } from '@nestjs/mongoose';
 import { UserSchema } from '../schemas/user.schema';
-import { CreateUserMiddleware } from 'src/middlewares/Users/create-user-middleware';
-import { GetUserByIdMiddleware } from 'src/middlewares/Users/get-user-by-id-middleware';
-import { GetUserByEmailMiddleware } from 'src/middlewares/Users/get-user-by-email-middleware';
-import { UpdateUserMidleWare } from 'src/middlewares/Users/update-user-middleware';
-import { DeleteUserMidleWare } from 'src/middlewares/Users/delete-user-middleware';
+import { CreateUserMiddleware } from '../middlewares/Users/create-user-middleware';
+import { GetUserByIdMiddleware } from '../middlewares/Users/get-user-by-id-middleware';
+import { GetUserByEmailMiddleware } from '../middlewares/Users/get-user-by-email-midleware';
+import { UpdateUserMidleWare } from '../middlewares/Users/update-user-midleware';
+import { DeleteUserMidleWare } from '../middlewares/Users/delete-user-middleware';
+import { AuthModule } from '../auth/auth.module';
 
 @Module({
-  imports: [MongooseModule.forFeature([{ name: 'User', schema: UserSchema }])],
+  imports: [
+    AuthModule,
+    MongooseModule.forFeature([{ name: 'User', schema: UserSchema }]),
+  ],
   controllers: [UsersController],
   providers: [UsersService],
 })
