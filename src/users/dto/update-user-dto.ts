@@ -1,24 +1,20 @@
-import { IsOptional, IsString, IsEnum } from 'class-validator';
+import { IsOptional, IsString, IsEnum, IsEmail } from 'class-validator';
 import { permissionLevel } from '../../schemas/user.schema';
 
 export class UpdateUserDto {
   @IsOptional()
   @IsString()
-  readonly name: string;
+  readonly name?: string;
 
   @IsOptional()
-  @IsString()
-  readonly email: string;
-
-  @IsOptional()
-  @IsString()
-  readonly password: string;
+  @IsEmail()
+  readonly email?: string;
 
   @IsOptional()
   @IsEnum(permissionLevel, { message: 'Invalid permission level' })
-  readonly permissionLevel: permissionLevel;
+  readonly permissionLevel?: permissionLevel;
 
   @IsOptional()
   @IsString()
-  readonly createdBy: string;
+  readonly createdBy?: string;
 }

@@ -47,6 +47,10 @@ export class CreateUserMiddleware implements NestMiddleware {
       return res.status(400).send({ error: 'Created by user not found' });
     }
 
+    if (createdBy.permissionLevel !== permissionLevel.ADMIN) {
+      return res.status(403).send({ error: 'Permission denied' });
+    }
+
     next();
   }
 }
