@@ -7,11 +7,11 @@ import {
 import { UsersController } from './users.controller';
 import { UsersService } from './users.service';
 import { MongooseModule } from '@nestjs/mongoose';
-import { UserSchema } from './schemas/user.schema';
+import { UserSchema } from '../schemas/user.schema';
 import { CreateUserMiddleware } from 'src/middlewares/Users/create-user-middleware';
 import { GetUserByIdMiddleware } from 'src/middlewares/Users/get-user-by-id-middleware';
-import { GetUserByEmailMiddleware } from 'src/middlewares/Users/get-user-by-email-midleware';
-import { UpdateUserMidleWare } from 'src/middlewares/Users/update-user-midleware';
+import { GetUserByEmailMiddleware } from 'src/middlewares/Users/get-user-by-email-middleware';
+import { UpdateUserMidleWare } from 'src/middlewares/Users/update-user-middleware';
 import { DeleteUserMidleWare } from 'src/middlewares/Users/delete-user-middleware';
 
 @Module({
