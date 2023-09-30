@@ -16,6 +16,7 @@ import { Query as ExpressQuery } from 'express-serve-static-core';
 import { CreatUserDto } from './dto/create-user-dto';
 import { AuthGuard } from '@nestjs/passport';
 import { User } from '../schemas/user.schema';
+import { UpdatePasswordDto } from './dto/update-password-dto';
 
 @Controller('users')
 export class UsersController {
@@ -33,7 +34,7 @@ export class UsersController {
     @Body()
     user: CreatUserDto,
   ): Promise<User> {
-    return this.usersService.create(user);
+    return this.usersService.create(user as User);
   }
 
   @Get(':id')
@@ -57,33 +58,29 @@ export class UsersController {
   @Put(':id')
   @UseGuards(AuthGuard())
   async updateUser(
-    @Query('executorId')
-    executorId: string,
     @Param('id')
     id: string,
     @Body()
     user: UpdateUserDto,
   ): Promise<User> {
-    return this.usersService.update(id, user as User, executorId);
+    return this.usersService.update(id, user as User);
   }
 
   @Delete(':id')
   @UseGuards(AuthGuard())
   async deleteUser(
-    @Query('executorId')
-    executorId: string,
     @Param('id')
     id: string,
   ): Promise<void> {
-    return this.usersService.delete(id, executorId);
+    return this.usersService.delete(id);
   }
 
-  @Patch(':id/password')
+  @Patch('update/password')
   @UseGuards(AuthGuard())
   async updatePassword(
-    @Param('id') id: string,
-    @Body('password') password: string,
+    @Body()
+    updatePasswordDto: UpdatePasswordDto,
   ): Promise<User> {
-    return this.usersService.updatePassword(id, password);
+    return this.usersService.updatePassword(updatePasswordDto);
   }
 }

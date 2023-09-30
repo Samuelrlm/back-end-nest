@@ -4,6 +4,7 @@ import { User } from '../schemas/user.schema';
 import mongoose from 'mongoose';
 import { Query } from 'express-serve-static-core';
 import * as bcrypt from 'bcryptjs';
+import { UpdatePasswordDto } from './dto/update-password-dto';
 
 @Injectable()
 export class UsersService {
@@ -39,7 +40,11 @@ export class UsersService {
   }
 
   async create(user: User): Promise<User> {
-    const res = await this.userModel.create(user);
+    const hashPassword = await bcrypt.hash(user.password, 10);
+
+    const res = await this.userModel.create(
+      Object.assign(user, { password: hashPassword }),
+    );
 
     return res;
   }
@@ -56,29 +61,22 @@ export class UsersService {
     return user;
   }
 
-  async update(id: string, user: User, executorId: string): Promise<User> {
-    if (!executorId) {
-      throw new NotFoundException('Missing executor id');
-    } else {
-      await this.userModel.findByIdAndUpdate(id, user, {
-        new: true,
-        runValidators: true,
-      });
-    }
+  async update(id: string, user: User): Promise<User> {
+    await this.userModel.findByIdAndUpdate(id, user, {
+      new: true,
+      runValidators: true,
+    });
     const updatedUser = await this.userModel.findById(id);
 
     return updatedUser;
   }
 
-  async delete(id: string, executorId: string): Promise<void> {
-    if (!executorId) {
-      throw new NotFoundException('Missing executor id');
-    } else {
-      return await this.userModel.findByIdAndDelete(id);
-    }
+  async delete(id: string): Promise<void> {
+    return await this.userModel.findByIdAndDelete(id);
   }
 
-  async updatePassword(id: string, password: string): Promise<User> {
+  async updatePassword(updatePasswordDto: UpdatePasswordDto): Promise<User> {
+    const { id, password } = updatePasswordDto;
     const hashPassword = await bcrypt.hash(password, 10);
 
     await this.userModel.findByIdAndUpdate(

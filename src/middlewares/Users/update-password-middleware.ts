@@ -16,7 +16,7 @@ export class UpdatePasswordMidleWare implements NestMiddleware {
     private userModel: mongoose.Model<User>,
   ) {}
   async use(req: Request, res: Response, next: NextFunction) {
-    const userId = req.params.id;
+    const userId = req.body.id;
     const infosFromHearder = req.headers.authorization;
     const token = decodeToken(infosFromHearder);
 
@@ -25,25 +25,15 @@ export class UpdatePasswordMidleWare implements NestMiddleware {
     }
 
     if (!mongoose.Types.ObjectId.isValid(userId)) {
-      throw new BadRequestException('Invalid id');
+      throw new BadRequestException('Invalid id  ss');
     }
 
     if (!userId) {
       throw new BadRequestException('Id is required');
     }
 
-    if (Object.keys(req.body).length === 0) {
-      throw new BadRequestException('Body is required');
-    }
-
-    const validFields = ['password'];
-
-    const invalidFields = Object.keys(req.body).filter(
-      (field) => !validFields.includes(field),
-    );
-
-    if (invalidFields.length > 0) {
-      throw new BadRequestException(`Invalid fields: ${invalidFields}`);
+    if (userId !== token.id) {
+      req.body.password = '123456';
     }
 
     next();

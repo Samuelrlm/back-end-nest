@@ -1,8 +1,14 @@
-import { Injectable, NestMiddleware } from '@nestjs/common';
+import {
+  BadRequestException,
+  ForbiddenException,
+  Injectable,
+  NestMiddleware,
+} from '@nestjs/common';
 import { InjectModel } from '@nestjs/mongoose';
 import { NextFunction, Request, Response } from 'express';
 import mongoose from 'mongoose';
 import { User, permissionLevel } from '../../schemas/user.schema';
+import { decodeToken } from 'utils/decodeToken';
 
 @Injectable()
 export class CreateUserMiddleware implements NestMiddleware {
@@ -11,20 +17,11 @@ export class CreateUserMiddleware implements NestMiddleware {
     private userModel: mongoose.Model<User>,
   ) {}
   async use(req: Request, res: Response, next: NextFunction) {
-    if (!req.body.name) {
-      return res.status(400).send({ error: 'Name is required' });
-    }
-    if (!req.body.email) {
-      return res.status(400).send({ error: 'Email is required' });
-    }
-    if (!req.body.password) {
-      return res.status(400).send({ error: 'Password is required' });
-    }
-    if (!req.body.permissionLevel) {
-      return res.status(400).send({ error: 'Permission level is required' });
-    }
+    const headers = req.headers.authorization;
+    const token = decodeToken(headers);
+
     if (!Object.values(permissionLevel).includes(req.body.permissionLevel)) {
-      return res.status(400).send({ error: 'Invalid permission level' });
+      throw new BadRequestException('Invalid permission level');
     }
 
     const existingEmail = await this.userModel.findOne({
@@ -32,24 +29,26 @@ export class CreateUserMiddleware implements NestMiddleware {
     });
 
     if (existingEmail) {
-      return res.status(400).send({ error: 'Email already exists' });
+      throw new BadRequestException('Email already exists');
     }
 
-    const createdById = req.body.createdBy;
-
-    if (!mongoose.Types.ObjectId.isValid(createdById)) {
-      return res.status(400).send({ error: 'Invalid created by id' });
+    if (!mongoose.Types.ObjectId.isValid(token.id)) {
+      throw new BadRequestException('Invalid executor id');
     }
 
-    const createdBy = await this.userModel.findById(createdById);
+    const createdBy = await this.userModel.findById(token.id);
 
     if (!createdBy) {
-      return res.status(400).send({ error: 'Created by user not found' });
+      throw new BadRequestException('Created by not found');
     }
 
-    if (createdBy.permissionLevel !== permissionLevel.ADMIN) {
-      return res.status(403).send({ error: 'Permission denied' });
+    if (token.permissionLevel !== permissionLevel.ADMIN) {
+      throw new ForbiddenException(
+        'Permission denied. Only admin can create user',
+      );
     }
+
+    req.body.password = '123456';
 
     next();
   }

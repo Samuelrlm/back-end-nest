@@ -10,11 +10,11 @@ import { MongooseModule } from '@nestjs/mongoose';
 import { UserSchema } from '../schemas/user.schema';
 import { CreateUserMiddleware } from '../middlewares/Users/create-user-middleware';
 import { GetUserByIdMiddleware } from '../middlewares/Users/get-user-by-id-middleware';
-import { GetUserByEmailMiddleware } from '../middlewares/Users/get-user-by-email-midleware';
-import { UpdateUserMidleWare } from '../middlewares/Users/update-user-midleware';
+import { GetUserByEmailMiddleware } from '../middlewares/Users/get-user-by-email-middleware';
+import { UpdateUserMidleWare } from '../middlewares/Users/update-user-middleware';
 import { DeleteUserMidleWare } from '../middlewares/Users/delete-user-middleware';
 import { AuthModule } from '../auth/auth.module';
-import { UpdatePasswordMidleWare } from 'src/middlewares/Users/update-password-middleware';
+import { UpdatePasswordMidleWare } from '../middlewares/Users/update-password-middleware';
 
 @Module({
   imports: [
