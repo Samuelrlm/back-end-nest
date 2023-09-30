@@ -51,7 +51,7 @@ export class AuthService {
     });
 
     await this.sessionUserModel.create({
-      user: user._id,
+      userId: user._id,
       token: token,
     });
 
