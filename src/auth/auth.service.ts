@@ -26,7 +26,11 @@ export class AuthService {
       permissionLevel,
     });
 
-    const token = this.jwtService.sign({ id: user._id });
+    const token = this.jwtService.sign({
+      id: user._id,
+      email: user.email,
+      permissionLevel: user.permissionLevel,
+    });
 
     return { token };
   }
@@ -38,7 +42,12 @@ export class AuthService {
       email: email,
     });
 
-    const token = this.jwtService.sign({ id: user._id });
+    const token = this.jwtService.sign({
+      id: user._id,
+      name: user.name,
+      email: user.email,
+      permissionLevel: user.permissionLevel,
+    });
 
     return { token };
   }
