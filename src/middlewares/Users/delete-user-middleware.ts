@@ -1,8 +1,15 @@
-import { Injectable, NestMiddleware, NotFoundException } from '@nestjs/common';
+import {
+  BadRequestException,
+  ForbiddenException,
+  Injectable,
+  NestMiddleware,
+  NotFoundException,
+} from '@nestjs/common';
 import { InjectModel } from '@nestjs/mongoose';
 import { NextFunction, Request, Response } from 'express';
 import mongoose from 'mongoose';
 import { User, permissionLevel } from '../../schemas/user.schema';
+import { decodeToken } from 'utils/decodeToken';
 
 @Injectable()
 export class DeleteUserMidleWare implements NestMiddleware {
@@ -12,41 +19,41 @@ export class DeleteUserMidleWare implements NestMiddleware {
   ) {}
   async use(req: Request, res: Response, next: NextFunction) {
     const id = req.params.id.toString();
-    const executorId = req.query.executorId as string;
+    const headers = req.headers.authorization;
+    const token = decodeToken(headers);
+
+    const executorId = token.id;
 
     if (!executorId) {
-      return res.status(400).send({ message: 'Missing executor id' });
+      throw new BadRequestException('Executor id is required');
     }
 
     if (!mongoose.Types.ObjectId.isValid(executorId)) {
-      return res.status(400).send({ message: 'Invalid executor id' });
+      throw new BadRequestException('Invalid executor id');
     }
 
     if (!mongoose.Types.ObjectId.isValid(id)) {
-      return res.status(400).send({ message: 'Invalid id' });
+      throw new BadRequestException('Invalid id');
     }
     if (!id) {
-      return res.status(400).send({ message: 'Missing id' });
+      throw new BadRequestException('Id is required');
     }
 
     if (id === executorId) {
-      return res.status(400).send({ message: 'Cannot delete yourself' });
+      throw new BadRequestException('Cannot delete yourself');
     }
 
-    const executor = await this.userModel.findById(executorId);
-    if (!executor) {
+    if (!token) {
       throw new NotFoundException('Executor not found');
     }
 
-    if (executor.permissionLevel !== permissionLevel.ADMIN) {
-      return res
-        .status(403)
-        .send({ message: 'Permission denied. Only admin can delete user' });
+    if (token.permissionLevel !== permissionLevel.ADMIN) {
+      throw new ForbiddenException('Permission denied');
     }
 
     const user = await this.userModel.findById(id);
     if (!user) {
-      throw new NotFoundException('User not found');
+      throw new BadRequestException('User not found');
     }
     next();
   }

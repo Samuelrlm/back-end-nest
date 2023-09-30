@@ -20,6 +20,8 @@ export class User {
   permissionLevel: permissionLevel;
   @Prop({ default: 'system' })
   createdBy: string;
+  @Prop()
+  executorId: string;
 }
 
 export const UserSchema = SchemaFactory.createForClass(User);

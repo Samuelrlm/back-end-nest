@@ -1,4 +1,9 @@
-import { Injectable, NestMiddleware, NotFoundException } from '@nestjs/common';
+import {
+  BadRequestException,
+  Injectable,
+  NestMiddleware,
+  NotFoundException,
+} from '@nestjs/common';
 import { InjectModel } from '@nestjs/mongoose';
 import { NextFunction, Request, Response } from 'express';
 import mongoose from 'mongoose';
@@ -13,10 +18,10 @@ export class GetUserByIdMiddleware implements NestMiddleware {
     const userId = req.params.id;
 
     if (!mongoose.Types.ObjectId.isValid(userId)) {
-      return res.status(400).send({ error: 'Invalid id' });
+      throw new BadRequestException('Invalid id');
     }
     if (!userId) {
-      return res.status(400).send({ error: 'Id is required' });
+      throw new BadRequestException('Id is required');
     } else {
       const user = await this.userModel.findById(userId); // Consulta no banco de dados pelo ID
 

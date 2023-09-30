@@ -5,7 +5,6 @@ import { getModelToken } from '@nestjs/mongoose';
 import { userMock } from '../mocks/user-mock';
 import { Model } from 'mongoose';
 import { newUserMock } from '../mocks/new-user-mock';
-import { CreatUserDto } from './dto/create-user-dto';
 
 describe('UsersService', () => {
   let usersService: UsersService;
@@ -58,7 +57,10 @@ describe('UsersService', () => {
     it('Should create and return a user', async () => {
       jest.spyOn(model, 'create').mockResolvedValueOnce(userMock as any);
 
-      const result = await usersService.create(newUserMock as CreatUserDto);
+      const result = await usersService.create({
+        ...newUserMock,
+        executorId: 'some-executor-id',
+      } as User);
 
       expect(result).toEqual(userMock);
     });

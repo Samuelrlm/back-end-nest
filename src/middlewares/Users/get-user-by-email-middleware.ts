@@ -14,7 +14,7 @@ export class GetUserByEmailMiddleware implements NestMiddleware {
     const userEmail = req.params.email;
 
     if (!userEmail) {
-      return res.status(400).send({ error: 'Email is required' });
+      throw new NotFoundException('Email is required');
     } else {
       const user = await this.userModel.findOne({ email: userEmail });
 
