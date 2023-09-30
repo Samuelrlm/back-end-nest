@@ -6,12 +6,13 @@ import * as bcrypt from 'bcryptjs';
 import { JwtService } from '@nestjs/jwt';
 import { SignUpDto } from './dto/signup-dto';
 import { LoginDto } from './dto/login.dto';
+import { SessionUser } from '../schemas/session.user.schema';
 
 @Injectable()
 export class AuthService {
   constructor(
-    @InjectModel(User.name)
-    private userModel: Model<User>,
+    @InjectModel(User.name) private userModel: Model<User>,
+    @InjectModel(SessionUser.name) private sessionUserModel: Model<SessionUser>,
     private jwtService: JwtService,
   ) {}
   async signUp(signUpDto: SignUpDto): Promise<{ token: string }> {
@@ -47,6 +48,11 @@ export class AuthService {
       name: user.name,
       email: user.email,
       permissionLevel: user.permissionLevel,
+    });
+
+    await this.sessionUserModel.create({
+      user: user._id,
+      token: token,
     });
 
     return { token };

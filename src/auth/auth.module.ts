@@ -14,6 +14,7 @@ import { ConfigService } from '@nestjs/config';
 import { SignUpMidleware } from '../middlewares/Auth/signup-middleware';
 import { LoginMidleware } from '../middlewares/Auth/login-middleware';
 import { JwtStrategy } from './jwt.strategy';
+import { SessionUserSchema } from 'src/schemas/session.user.schema';
 
 @Module({
   imports: [
@@ -30,6 +31,9 @@ import { JwtStrategy } from './jwt.strategy';
       },
     }),
     MongooseModule.forFeature([{ name: 'User', schema: UserSchema }]),
+    MongooseModule.forFeature([
+      { name: 'SessionUser', schema: SessionUserSchema },
+    ]),
   ],
   controllers: [AuthController],
   providers: [AuthService, JwtStrategy],
