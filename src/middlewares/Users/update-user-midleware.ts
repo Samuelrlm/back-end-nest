@@ -77,6 +77,15 @@ export class UpdateUserMidleWare implements NestMiddleware {
       return res.status(400).send({ error: 'Invalid permission level' });
     }
 
+    if (
+      req.body.permissionLevel &&
+      existingExecutorId.permissionLevel < permissionLevel.ADMIN
+    ) {
+      return res.status(403).send({
+        error: 'You dont have permission for update permission level',
+      });
+    }
+
     next();
   }
 }

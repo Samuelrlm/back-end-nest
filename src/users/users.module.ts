@@ -14,6 +14,7 @@ import { GetUserByEmailMiddleware } from '../middlewares/Users/get-user-by-email
 import { UpdateUserMidleWare } from '../middlewares/Users/update-user-midleware';
 import { DeleteUserMidleWare } from '../middlewares/Users/delete-user-middleware';
 import { AuthModule } from '../auth/auth.module';
+import { UpdatePasswordMidleWare } from 'src/middlewares/Users/update-password-middleware';
 
 @Module({
   imports: [
@@ -44,5 +45,9 @@ export class UsersModule implements NestModule {
     consumer
       .apply(DeleteUserMidleWare)
       .forRoutes({ path: 'users/:id', method: RequestMethod.DELETE });
+
+    consumer
+      .apply(UpdatePasswordMidleWare)
+      .forRoutes({ path: 'users/:id/password', method: RequestMethod.PATCH });
   }
 }

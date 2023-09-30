@@ -3,6 +3,7 @@ import { InjectModel } from '@nestjs/mongoose';
 import { User } from '../schemas/user.schema';
 import mongoose from 'mongoose';
 import { Query } from 'express-serve-static-core';
+import * as bcrypt from 'bcryptjs';
 
 @Injectable()
 export class UsersService {
@@ -75,5 +76,22 @@ export class UsersService {
     } else {
       return await this.userModel.findByIdAndDelete(id);
     }
+  }
+
+  async updatePassword(id: string, password: string): Promise<User> {
+    const hashPassword = await bcrypt.hash(password, 10);
+
+    await this.userModel.findByIdAndUpdate(
+      id,
+      { password: hashPassword },
+      {
+        new: true,
+        runValidators: true,
+      },
+    );
+
+    const updatedUser = await this.userModel.findById(id);
+
+    return updatedUser;
   }
 }

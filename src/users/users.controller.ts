@@ -4,6 +4,7 @@ import {
   Delete,
   Get,
   Param,
+  Patch,
   Post,
   Put,
   Query,
@@ -75,5 +76,14 @@ export class UsersController {
     id: string,
   ): Promise<void> {
     return this.usersService.delete(id, executorId);
+  }
+
+  @Patch(':id/password')
+  @UseGuards(AuthGuard())
+  async updatePassword(
+    @Param('id') id: string,
+    @Body('password') password: string,
+  ): Promise<User> {
+    return this.usersService.updatePassword(id, password);
   }
 }
