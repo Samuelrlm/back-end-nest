@@ -1,4 +1,4 @@
-import { Controller, Get, UseGuards } from '@nestjs/common';
+import { Controller, Delete, Get, Param, UseGuards } from '@nestjs/common';
 import { SessionUserService } from './session-user.service';
 import { AuthGuard } from '@nestjs/passport';
 
@@ -10,5 +10,14 @@ export class SessionUserController {
   @UseGuards(AuthGuard())
   async getAllSessions() {
     return this.sessionUserService.getAllSessions();
+  }
+
+  @Delete(':userId')
+  @UseGuards(AuthGuard())
+  async deleteSession(
+    @Param('userId')
+    deleteSessionUserId: string,
+  ) {
+    return this.sessionUserService.deleteSession(deleteSessionUserId);
   }
 }

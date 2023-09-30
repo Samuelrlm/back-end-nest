@@ -15,4 +15,8 @@ export class SessionUserService {
 
     return sessions;
   }
+
+  async deleteSession(userId: string): Promise<any> {
+    return await this.sessionUserModel.deleteOne({ userId });
+  }
 }

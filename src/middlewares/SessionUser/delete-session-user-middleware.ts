@@ -8,17 +8,17 @@ import {
 import { InjectModel } from '@nestjs/mongoose';
 import { NextFunction, Request, Response } from 'express';
 import mongoose from 'mongoose';
-import { User, permissionLevel } from '../../schemas/user.schema';
 import { decodeToken } from 'utils/decodeToken';
+import { SessionUser } from 'src/schemas/session.user.schema';
 
 @Injectable()
-export class DeleteUserMidleWare implements NestMiddleware {
+export class DeleteSessionUserMiddleware implements NestMiddleware {
   constructor(
-    @InjectModel(User.name)
-    private userModel: mongoose.Model<User>,
+    @InjectModel(SessionUser.name)
+    private sessionUserModel: mongoose.Model<SessionUser>,
   ) {}
   async use(req: Request, res: Response, next: NextFunction) {
-    const id = req.params.id;
+    const userId = req.params.userId;
     const headers = req.headers.authorization;
     const token = decodeToken(headers);
 
@@ -32,29 +32,29 @@ export class DeleteUserMidleWare implements NestMiddleware {
       throw new BadRequestException('Invalid executor id');
     }
 
-    if (!mongoose.Types.ObjectId.isValid(id)) {
+    if (!mongoose.Types.ObjectId.isValid(userId)) {
       throw new BadRequestException('Invalid id');
     }
-    if (!id) {
+    if (!userId) {
       throw new BadRequestException('Id is required');
     }
 
-    if (id === executorId) {
-      throw new BadRequestException('Cannot delete yourself');
+    const user = await this.sessionUserModel.findOne({ userId });
+
+    if (!user) {
+      throw new BadRequestException('User not found');
+    }
+
+    if (userId !== executorId) {
+      throw new ForbiddenException(
+        'You do not have permission to delete this session',
+      );
     }
 
     if (!token) {
       throw new NotFoundException('Executor not found');
     }
 
-    if (token.permissionLevel !== permissionLevel.ADMIN) {
-      throw new ForbiddenException('Permission denied');
-    }
-
-    const user = await this.userModel.findById(id);
-    if (!user) {
-      throw new BadRequestException('User not found');
-    }
     next();
   }
 }
