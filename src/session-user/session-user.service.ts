@@ -1,7 +1,8 @@
-import { Injectable } from '@nestjs/common';
+import { ForbiddenException, Injectable } from '@nestjs/common';
 import { InjectModel } from '@nestjs/mongoose';
 import { Model } from 'mongoose';
 import { SessionUser } from '../../src/schemas/session.user.schema';
+import { LogoutDto } from './dto/logout.dto';
 
 @Injectable()
 export class SessionUserService {
@@ -16,7 +17,13 @@ export class SessionUserService {
     return sessions;
   }
 
-  async deleteSession(userId: string): Promise<any> {
-    return await this.sessionUserModel.deleteOne({ userId });
+  async logout(tokenDto: LogoutDto): Promise<any> {
+    const { token } = tokenDto;
+
+    if (!token) {
+      throw new ForbiddenException('Token is required');
+    }
+
+    return { message: 'Logout success' };
   }
 }

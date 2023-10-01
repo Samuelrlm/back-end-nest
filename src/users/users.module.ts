@@ -17,12 +17,16 @@ import { AuthModule } from '../auth/auth.module';
 import { UpdatePasswordMidleWare } from '../middlewares/Users/update-password-middleware';
 import { BlackListMiddleware } from '../../src/middlewares/black-list-middleware';
 import { BlackListSchema } from '../../src/schemas/black.list.schema';
+import { SessionUserSchema } from 'src/schemas/session.user.schema';
 
 @Module({
   imports: [
     AuthModule,
     MongooseModule.forFeature([{ name: 'User', schema: UserSchema }]),
     MongooseModule.forFeature([{ name: 'BlackList', schema: BlackListSchema }]),
+    MongooseModule.forFeature([
+      { name: 'SessionUser', schema: SessionUserSchema },
+    ]),
   ],
   controllers: [UsersController],
   providers: [UsersService],

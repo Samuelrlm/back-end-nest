@@ -54,7 +54,10 @@ export class UpdateUserMidleWare implements NestMiddleware {
       throw new BadRequestException('Cannot update yourself');
     }
 
-    if (existingExecutorId.permissionLevel < permissionLevel.EDITOR) {
+    if (
+      existingExecutorId.permissionLevel < permissionLevel.EDITOR &&
+      userId !== token.id
+    ) {
       throw new ForbiddenException('You dont have permission for update user');
     }
 
