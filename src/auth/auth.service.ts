@@ -7,7 +7,7 @@ import { JwtService } from '@nestjs/jwt';
 import { SignUpDto } from './dto/signup-dto';
 import { LoginDto } from './dto/login.dto';
 import { SessionUser } from '../schemas/session.user.schema';
-import { BlackList } from 'src/schemas/black.list.schema';
+import { BlackList } from '../../src/schemas/black.list.schema';
 
 @Injectable()
 export class AuthService {

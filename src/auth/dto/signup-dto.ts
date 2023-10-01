@@ -5,7 +5,7 @@ import {
   IsEmail,
   MinLength,
 } from 'class-validator';
-import { permissionLevel } from 'src/schemas/user.schema';
+import { permissionLevel } from '../../../src/schemas/user.schema';
 
 export class SignUpDto {
   @IsNotEmpty()

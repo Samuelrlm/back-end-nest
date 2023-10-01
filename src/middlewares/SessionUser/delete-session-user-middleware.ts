@@ -8,8 +8,8 @@ import {
 import { InjectModel } from '@nestjs/mongoose';
 import { NextFunction, Request, Response } from 'express';
 import mongoose from 'mongoose';
-import { decodeToken } from 'utils/decodeToken';
-import { SessionUser } from 'src/schemas/session.user.schema';
+import { decodeToken } from '../../../utils/decodeToken';
+import { SessionUser } from '../../../src/schemas/session.user.schema';
 
 @Injectable()
 export class DeleteSessionUserMiddleware implements NestMiddleware {

@@ -2,7 +2,7 @@ import { ForbiddenException, Injectable, NestMiddleware } from '@nestjs/common';
 import { InjectModel } from '@nestjs/mongoose';
 import { NextFunction, Request, Response } from 'express';
 import mongoose from 'mongoose';
-import { BlackList } from 'src/schemas/black.list.schema';
+import { BlackList } from '../../src/schemas/black.list.schema';
 
 @Injectable()
 export class BlackListMiddleware implements NestMiddleware {
