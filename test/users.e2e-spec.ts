@@ -9,10 +9,10 @@ import { decodeToken } from '../utils/decodeToken';
 
 describe('Users & Auth Controller (e2e)', () => {
   let app: INestApplication;
-  let token = '';
-  let userId = '';
-  let userEmail = '';
-  let updateUserId = '';
+  let tokenLogin = '';
+  let userIdRegister = '';
+  let userIdCreate = '';
+  let userEmailCreate = '';
 
   beforeEach(async () => {
     const moduleFixture: TestingModule = await Test.createTestingModule({
@@ -38,26 +38,9 @@ describe('Users & Auth Controller (e2e)', () => {
       .send(SigupUserMock)
       .expect(201);
     expect(response.body).toBeDefined();
-    token = response.body.token;
-    const infoToken = decodeToken(`Bearer ${token}`);
-    userId = infoToken.id;
-    userEmail = infoToken.email;
-  });
-
-  it('(POST) Register New User in Signup', async () => {
-    const response = await request(app.getHttpServer())
-      .post('/auth/signup')
-      .send({
-        name: 'Teste',
-        email: 'samuca@gmail.com',
-        password: '123456',
-        permissionLevel: 2,
-      })
-      .expect(201);
-    expect(response.body).toBeDefined();
-    token = response.body.token;
-    const infoToken = decodeToken(`Bearer ${token}`);
-    updateUserId = infoToken.id;
+    const tokenResponse = await response.body.token;
+    const infoToken = decodeToken(`Bearer ${tokenResponse}`);
+    userIdRegister = infoToken.id;
   });
 
   it('(GET) Login User in Login', async () => {
@@ -66,45 +49,49 @@ describe('Users & Auth Controller (e2e)', () => {
       .send({ email: SigupUserMock.email, password: SigupUserMock.password })
       .expect(200);
     expect(response.body).toBeDefined();
-  });
-
-  it('(GET) Get All Users', async () => {
-    const response = await request(app.getHttpServer())
-      .get('/users')
-      .set('Authorization', `Bearer ${token}`)
-      .expect(200);
-    expect(response.body).toBeDefined();
+    tokenLogin = await response.body.token;
   });
 
   it('(POST) Create User', async () => {
     const response = await request(app.getHttpServer())
       .post('/users')
-      .set('Authorization', `Bearer ${token}`)
+      .set('Authorization', `Bearer ${tokenLogin}`)
       .send(createUserMock)
       .expect(201);
+    expect(response.body).toBeDefined();
+    const responseInfo = await response.body;
+    userIdCreate = responseInfo._id;
+    userEmailCreate = responseInfo.email;
+  });
+
+  it('(GET) Get All Users', async () => {
+    const response = await request(app.getHttpServer())
+      .get('/users')
+      .set('Authorization', `Bearer ${tokenLogin}`)
+      .expect(200);
     expect(response.body).toBeDefined();
   });
 
   it('(GET) Get User By Id', async () => {
     const response = await request(app.getHttpServer())
-      .get(`/users/${updateUserId}`)
-      .set('Authorization', `Bearer ${token}`)
+      .get(`/users/${userIdCreate}`)
+      .set('Authorization', `Bearer ${tokenLogin}`)
       .expect(200);
     expect(response.body).toBeDefined();
   });
 
   it('(GET) Get User By Email', async () => {
     const response = await request(app.getHttpServer())
-      .get(`/users/email/${userEmail}`)
-      .set('Authorization', `Bearer ${token}`)
+      .get(`/users/email/${userEmailCreate}`)
+      .set('Authorization', `Bearer ${tokenLogin}`)
       .expect(200);
     expect(response.body).toBeDefined();
   });
 
   it('(PUT) Update User', async () => {
     const response = await request(app.getHttpServer())
-      .put(`/users/${userId}`)
-      .set('Authorization', `Bearer ${token}`)
+      .put(`/users/${userIdCreate}`)
+      .set('Authorization', `Bearer ${tokenLogin}`)
       .send({
         name: 'Updated Name',
       })
@@ -115,9 +102,9 @@ describe('Users & Auth Controller (e2e)', () => {
   it('(PATCH) Update Password My User', async () => {
     const response = await request(app.getHttpServer())
       .patch(`/users/update/password`)
-      .set('Authorization', `Bearer ${token}`)
+      .set('Authorization', `Bearer ${tokenLogin}`)
       .send({
-        id: userId,
+        id: userIdRegister,
         password: '123456',
       })
       .expect(200);
@@ -127,9 +114,9 @@ describe('Users & Auth Controller (e2e)', () => {
   it('(PATCH) Update Password Other User', async () => {
     const response = await request(app.getHttpServer())
       .patch(`/users/update/password`)
-      .set('Authorization', `Bearer ${token}`)
+      .set('Authorization', `Bearer ${tokenLogin}`)
       .send({
-        id: updateUserId,
+        id: userIdCreate,
         password: '123456',
       })
       .expect(200);
@@ -138,8 +125,8 @@ describe('Users & Auth Controller (e2e)', () => {
 
   it('(DELETE) Delete User', async () => {
     const response = await request(app.getHttpServer())
-      .delete(`/users/${userId}`)
-      .set('Authorization', `Bearer ${token}`)
+      .delete(`/users/${userIdCreate}`)
+      .set('Authorization', `Bearer ${tokenLogin}`)
       .expect(200);
     expect(response.body).toBeDefined();
   });

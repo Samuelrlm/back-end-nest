@@ -9,7 +9,7 @@ import {
   ApiOperation,
   ApiTags,
 } from '@nestjs/swagger';
-import { BadRequest } from 'src/helpres/swagger/bad-request';
+import { BadRequest } from '../helpres/swagger/bad-request';
 
 @ApiTags('black-list')
 @Controller('black-list')

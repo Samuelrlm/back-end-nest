@@ -24,9 +24,9 @@ import {
   ApiOperation,
   ApiTags,
 } from '@nestjs/swagger';
-import { OkResponse } from 'src/helpres/swagger/ok-response';
-import { BadRequest } from 'src/helpres/swagger/bad-request';
-import { OkPostUserResponse } from 'src/helpres/swagger/ok-post-user-response';
+import { OkResponse } from '../helpres/swagger/ok-response';
+import { BadRequest } from '../helpres/swagger/bad-request';
+import { OkPostUserResponse } from '../helpres/swagger/ok-post-user-response';
 
 @ApiTags('users')
 @Controller('users')

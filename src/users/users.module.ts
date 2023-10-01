@@ -17,7 +17,7 @@ import { AuthModule } from '../auth/auth.module';
 import { UpdatePasswordMidleWare } from '../middlewares/Users/update-password-middleware';
 import { BlackListMiddleware } from '../../src/middlewares/black-list-middleware';
 import { BlackListSchema } from '../../src/schemas/black.list.schema';
-import { SessionUserSchema } from 'src/schemas/session.user.schema';
+import { SessionUserSchema } from '../schemas/session.user.schema';
 
 @Module({
   imports: [

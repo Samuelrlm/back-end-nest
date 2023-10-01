@@ -6,8 +6,8 @@ import {
 import { InjectModel } from '@nestjs/mongoose';
 import { NextFunction, Request, Response } from 'express';
 import mongoose from 'mongoose';
-import { SessionUser } from 'src/schemas/session.user.schema';
-import { BlackList } from 'src/schemas/black.list.schema';
+import { SessionUser } from '../../schemas/session.user.schema';
+import { BlackList } from '../../schemas/black.list.schema';
 
 @Injectable()
 export class LogoutMiddleware implements NestMiddleware {

@@ -9,9 +9,9 @@ import {
   ApiOperation,
   ApiTags,
 } from '@nestjs/swagger';
-import { BadRequest } from 'src/helpres/swagger/bad-request';
-import { OkRequestSession } from 'src/helpres/swagger/ok-request-session';
-import { OkLogout } from 'src/helpres/swagger/ok-logout';
+import { BadRequest } from '../helpres/swagger/bad-request';
+import { OkRequestSession } from '../helpres/swagger/ok-request-session';
+import { OkLogout } from '../helpres/swagger/ok-logout';
 
 @ApiTags('session-user')
 @Controller('session-user')

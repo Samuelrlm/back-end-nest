@@ -12,7 +12,7 @@ import { SessionUserSchema } from '../../src/schemas/session.user.schema';
 import { DeleteSessionUserMiddleware } from '../../src/middlewares/SessionUser/delete-session-user-middleware';
 import { BlackListSchema } from '../../src/schemas/black.list.schema';
 import { BlackListMiddleware } from '../../src/middlewares/black-list-middleware';
-import { LogoutMiddleware } from 'src/middlewares/SessionUser/logout-middleware';
+import { LogoutMiddleware } from '../middlewares/SessionUser/logout-middleware';
 
 @Module({
   imports: [
