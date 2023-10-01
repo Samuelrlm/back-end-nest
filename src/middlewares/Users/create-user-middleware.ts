@@ -49,6 +49,7 @@ export class CreateUserMiddleware implements NestMiddleware {
     }
 
     req.body.password = '123456';
+    req.body.createdBy = token.id;
 
     next();
   }
