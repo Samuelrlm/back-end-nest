@@ -9,8 +9,8 @@ import {
   ApiOperation,
   ApiTags,
 } from '@nestjs/swagger';
-import { BadRequest } from 'src/helpres/swagger/bad-request';
-import { TokenResponse } from 'src/helpres/swagger/token-response';
+import { BadRequest } from '../helpres/swagger/bad-request';
+import { TokenResponse } from '../helpres/swagger/token-response';
 
 @ApiTags('auth')
 @Controller('auth')

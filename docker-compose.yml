@@ -1,0 +1,25 @@
+version: '3.8'
+services:
+  mongodb:
+    image: mongo
+    container_name: users-db
+    ports:
+      - "27017:27017"
+    environment:
+      MONGO_INITDB_DATABASE: users-db
+
+  my-api:
+    image: node:18.18
+    container_name: my-api
+    ports:
+      - "4707:4707"
+    depends_on:
+      - mongodb
+    volumes:
+      - .:/usr/src
+    working_dir: /usr/src
+    environment:
+      - DB_URI=mongodb://mongodb:27017/users-db
+      - JWT_SECRET=VaiTallos
+      - JWT_EXPIRES=1d
+    command: sh -c "npm install && npm run start"
