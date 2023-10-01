@@ -32,7 +32,7 @@ export class AuthService {
     const token = this.jwtService.sign({
       id: user._id,
       email: user.email,
-      namw: user.name,
+      name: user.name,
       permissionLevel: user.permissionLevel,
     });
 
