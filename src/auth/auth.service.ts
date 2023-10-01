@@ -6,12 +6,15 @@ import * as bcrypt from 'bcryptjs';
 import { JwtService } from '@nestjs/jwt';
 import { SignUpDto } from './dto/signup-dto';
 import { LoginDto } from './dto/login.dto';
+import { SessionUser } from '../schemas/session.user.schema';
+import { BlackList } from 'src/schemas/black.list.schema';
 
 @Injectable()
 export class AuthService {
   constructor(
-    @InjectModel(User.name)
-    private userModel: Model<User>,
+    @InjectModel(User.name) private userModel: Model<User>,
+    @InjectModel(SessionUser.name) private sessionUserModel: Model<SessionUser>,
+    @InjectModel(BlackList.name) private blackListModel: Model<BlackList>,
     private jwtService: JwtService,
   ) {}
   async signUp(signUpDto: SignUpDto): Promise<{ token: string }> {
@@ -29,6 +32,7 @@ export class AuthService {
     const token = this.jwtService.sign({
       id: user._id,
       email: user.email,
+      namw: user.name,
       permissionLevel: user.permissionLevel,
     });
 
@@ -38,17 +42,54 @@ export class AuthService {
   async login(LoginDto: LoginDto): Promise<{ token: string }> {
     const { email } = LoginDto;
 
-    const user = await this.userModel.findOne({
+    const userInSessionActive = await this.sessionUserModel.findOne({
       email: email,
     });
 
-    const token = this.jwtService.sign({
-      id: user._id,
-      name: user.name,
-      email: user.email,
-      permissionLevel: user.permissionLevel,
-    });
+    if (userInSessionActive) {
+      await this.sessionUserModel.deleteOne({
+        email: email,
+      });
 
-    return { token };
+      await this.blackListModel.create({
+        token: userInSessionActive.token,
+      });
+
+      const user = await this.userModel.findOne({
+        email: email,
+      });
+
+      const token = this.jwtService.sign({
+        id: user._id,
+        name: user.name,
+        email: user.email,
+        permissionLevel: user.permissionLevel,
+      });
+
+      await this.sessionUserModel.create({
+        userId: user._id,
+        token: token,
+      });
+
+      return { token };
+    } else {
+      const user = await this.userModel.findOne({
+        email: email,
+      });
+
+      const token = this.jwtService.sign({
+        id: user._id,
+        name: user.name,
+        email: user.email,
+        permissionLevel: user.permissionLevel,
+      });
+
+      await this.sessionUserModel.create({
+        userId: user._id,
+        token: token,
+      });
+
+      return { token };
+    }
   }
 }
