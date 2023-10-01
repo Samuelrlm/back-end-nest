@@ -1,0 +1,21 @@
+version: 'version'
+services:
+  mongodb:
+    image: mongo
+    container_name: users-db
+    ports:
+      - "27017:27017"
+    environment:
+      MONGO_INITDB_DATABASE: users-db
+
+  my-api:
+    build:
+      context: .
+    container_name: api-users
+    ports:
+      - "4707:4707"
+    depends_on:
+      - mongodb
+    environment:
+      MONGO_URI: mongodb://mongodb:27017/users-db
+    command: sh -c "npm i && npm run start"
