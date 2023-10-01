@@ -1,6 +1,7 @@
-import { Controller, Delete, Get, Param, UseGuards } from '@nestjs/common';
+import { Body, Controller, Get, Post, UseGuards } from '@nestjs/common';
 import { SessionUserService } from './session-user.service';
 import { AuthGuard } from '@nestjs/passport';
+import { LogoutDto } from './dto/logout.dto';
 
 @Controller('session-user')
 export class SessionUserController {
@@ -12,12 +13,9 @@ export class SessionUserController {
     return this.sessionUserService.getAllSessions();
   }
 
-  @Delete(':userId')
+  @Post('/logout')
   @UseGuards(AuthGuard())
-  async deleteSession(
-    @Param('userId')
-    deleteSessionUserId: string,
-  ) {
-    return this.sessionUserService.deleteSession(deleteSessionUserId);
+  logout(@Body() logoutDto: LogoutDto): Promise<{ token: string }> {
+    return this.sessionUserService.logout(logoutDto);
   }
 }
