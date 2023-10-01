@@ -15,8 +15,8 @@ import { UpdateUserMidleWare } from '../middlewares/Users/update-user-middleware
 import { DeleteUserMidleWare } from '../middlewares/Users/delete-user-middleware';
 import { AuthModule } from '../auth/auth.module';
 import { UpdatePasswordMidleWare } from '../middlewares/Users/update-password-middleware';
-import { BlackListMiddleware } from 'src/middlewares/black-list-middleware';
-import { BlackListSchema } from 'src/schemas/black.list.schema';
+import { BlackListMiddleware } from '../../src/middlewares/black-list-middleware';
+import { BlackListSchema } from '../../src/schemas/black.list.schema';
 
 @Module({
   imports: [

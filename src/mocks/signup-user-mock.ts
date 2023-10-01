@@ -1,8 +1,8 @@
 import { permissionLevel } from '../schemas/user.schema';
 
-export const newUserMock = {
-  name: 'Go Tallos',
-  email: 'test@gmail.com',
+export const SigupUserMock = {
+  name: 'Cajuzinho',
+  email: 'tallos@gmail.com.br',
   permissionLevel: permissionLevel.ADMIN,
   password: '123456',
 };

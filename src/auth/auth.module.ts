@@ -14,11 +14,12 @@ import { ConfigService } from '@nestjs/config';
 import { SignUpMidleware } from '../middlewares/Auth/signup-middleware';
 import { LoginMidleware } from '../middlewares/Auth/login-middleware';
 import { JwtStrategy } from './jwt.strategy';
-import { SessionUserSchema } from 'src/schemas/session.user.schema';
-import { BlackListSchema } from 'src/schemas/black.list.schema';
+import { SessionUserSchema } from '../../src/schemas/session.user.schema';
+import { BlackListSchema } from '../../src/schemas/black.list.schema';
 
 @Module({
   imports: [
+    PassportModule.register({ defaultStrategy: 'jwt' }),
     JwtModule.registerAsync({
       inject: [ConfigService],
       useFactory: (config: ConfigService) => {

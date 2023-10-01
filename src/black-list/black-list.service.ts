@@ -1,7 +1,7 @@
 import { Injectable } from '@nestjs/common';
 import { InjectModel } from '@nestjs/mongoose';
 import mongoose from 'mongoose';
-import { BlackList } from 'src/schemas/black.list.schema';
+import { BlackList } from '../../src/schemas/black.list.schema';
 import { AddTokenDto } from './dto/add-token-dto';
 
 @Injectable()

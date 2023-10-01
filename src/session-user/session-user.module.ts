@@ -6,12 +6,12 @@ import {
 } from '@nestjs/common';
 import { SessionUserService } from './session-user.service';
 import { SessionUserController } from './session-user.controller';
-import { AuthModule } from 'src/auth/auth.module';
+import { AuthModule } from '../../src/auth/auth.module';
 import { MongooseModule } from '@nestjs/mongoose';
-import { SessionUserSchema } from 'src/schemas/session.user.schema';
-import { DeleteSessionUserMiddleware } from 'src/middlewares/SessionUser/delete-session-user-middleware';
-import { BlackListSchema } from 'src/schemas/black.list.schema';
-import { BlackListMiddleware } from 'src/middlewares/black-list-middleware';
+import { SessionUserSchema } from '../../src/schemas/session.user.schema';
+import { DeleteSessionUserMiddleware } from '../../src/middlewares/SessionUser/delete-session-user-middleware';
+import { BlackListSchema } from '../../src/schemas/black.list.schema';
+import { BlackListMiddleware } from '../../src/middlewares/black-list-middleware';
 
 @Module({
   imports: [

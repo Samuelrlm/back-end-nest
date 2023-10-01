@@ -11,7 +11,7 @@ import { BlackListModule } from './black-list/black-list.module';
 @Module({
   imports: [
     ConfigModule.forRoot({
-      envFilePath: '.env',
+      envFilePath: `.env.${process.env.NODE_ENV}`,
       isGlobal: true,
     }),
     MongooseModule.forRoot(process.env.DB_URI),

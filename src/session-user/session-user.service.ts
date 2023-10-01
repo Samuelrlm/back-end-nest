@@ -1,7 +1,7 @@
 import { Injectable } from '@nestjs/common';
 import { InjectModel } from '@nestjs/mongoose';
 import { Model } from 'mongoose';
-import { SessionUser } from 'src/schemas/session.user.schema';
+import { SessionUser } from '../../src/schemas/session.user.schema';
 
 @Injectable()
 export class SessionUserService {

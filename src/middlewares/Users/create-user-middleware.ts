@@ -8,7 +8,7 @@ import { InjectModel } from '@nestjs/mongoose';
 import { NextFunction, Request, Response } from 'express';
 import mongoose from 'mongoose';
 import { User, permissionLevel } from '../../schemas/user.schema';
-import { decodeToken } from 'utils/decodeToken';
+import { decodeToken } from '../../../utils/decodeToken';
 
 @Injectable()
 export class CreateUserMiddleware implements NestMiddleware {
@@ -49,6 +49,7 @@ export class CreateUserMiddleware implements NestMiddleware {
     }
 
     req.body.password = '123456';
+    req.body.createdBy = token.id;
 
     next();
   }
