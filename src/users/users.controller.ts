@@ -17,7 +17,9 @@ import { CreatUserDto } from './dto/create-user-dto';
 import { AuthGuard } from '@nestjs/passport';
 import { User } from '../schemas/user.schema';
 import { UpdatePasswordDto } from './dto/update-password-dto';
+import { ApiTags } from '@nestjs/swagger';
 
+@ApiTags('users')
 @Controller('users')
 export class UsersController {
   constructor(private usersService: UsersService) {}

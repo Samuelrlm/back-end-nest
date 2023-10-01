@@ -2,7 +2,9 @@ import { Body, Controller, Get, Post, UseGuards } from '@nestjs/common';
 import { SessionUserService } from './session-user.service';
 import { AuthGuard } from '@nestjs/passport';
 import { LogoutDto } from './dto/logout.dto';
+import { ApiTags } from '@nestjs/swagger';
 
+@ApiTags('session-user')
 @Controller('session-user')
 export class SessionUserController {
   constructor(private sessionUserService: SessionUserService) {}
