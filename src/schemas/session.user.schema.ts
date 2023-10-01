@@ -7,6 +7,8 @@ export class SessionUser {
   @Prop()
   userId: string;
   @Prop()
+  email: string;
+  @Prop()
   token: string;
 }
 

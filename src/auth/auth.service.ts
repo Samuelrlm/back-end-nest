@@ -68,6 +68,7 @@ export class AuthService {
 
       await this.sessionUserModel.create({
         userId: user._id,
+        email: user.email,
         token: token,
       });
 
@@ -86,6 +87,7 @@ export class AuthService {
 
       await this.sessionUserModel.create({
         userId: user._id,
+        email: user.email,
         token: token,
       });
 
