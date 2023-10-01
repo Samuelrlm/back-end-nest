@@ -9,7 +9,7 @@ import { SessionUserController } from './session-user.controller';
 import { AuthModule } from '../../src/auth/auth.module';
 import { MongooseModule } from '@nestjs/mongoose';
 import { SessionUserSchema } from '../../src/schemas/session.user.schema';
-import { DeleteSessionUserMiddleware } from 'src/middlewares/SessionUser/delete-session-user-middleware';
+import { DeleteSessionUserMiddleware } from '../../src/middlewares/SessionUser/delete-session-user-middleware';
 import { BlackListSchema } from '../../src/schemas/black.list.schema';
 import { BlackListMiddleware } from '../../src/middlewares/black-list-middleware';
 

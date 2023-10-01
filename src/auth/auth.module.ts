@@ -19,6 +19,7 @@ import { BlackListSchema } from '../../src/schemas/black.list.schema';
 
 @Module({
   imports: [
+    PassportModule.register({ defaultStrategy: 'jwt' }),
     JwtModule.registerAsync({
       inject: [ConfigService],
       useFactory: (config: ConfigService) => {
