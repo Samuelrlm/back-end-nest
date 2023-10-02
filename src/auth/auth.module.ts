@@ -49,6 +49,6 @@ export class AuthModule implements NestModule {
 
     consumer
       .apply(LoginMidleware)
-      .forRoutes({ path: 'auth/login', method: RequestMethod.GET });
+      .forRoutes({ path: 'auth/login', method: RequestMethod.POST });
   }
 }
