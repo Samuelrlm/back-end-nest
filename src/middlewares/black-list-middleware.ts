@@ -14,9 +14,12 @@ export class BlackListMiddleware implements NestMiddleware {
     private sessionUserModel: mongoose.Model<SessionUser>,
   ) {}
   async use(req: Request, res: Response, next: NextFunction) {
+    let token: string;
     const headers = req.headers.authorization;
-    const token = headers.split(' ')[1];
 
+    if (headers) {
+      token = headers.split(' ')[1];
+    }
     const session = await this.sessionUserModel.findOne({ token });
 
     if (!session) {

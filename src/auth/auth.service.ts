@@ -39,7 +39,12 @@ export class AuthService {
     return { token };
   }
 
-  async login(LoginDto: LoginDto): Promise<{ token: string }> {
+  async login(LoginDto: LoginDto): Promise<{
+    email: string;
+    name: string;
+    permissionLevel: number;
+    token: string;
+  }> {
     const { email } = LoginDto;
 
     const userInSessionActive = await this.sessionUserModel.findOne({
@@ -72,7 +77,12 @@ export class AuthService {
         token: token,
       });
 
-      return { token };
+      return {
+        email: user.email,
+        name: user.name,
+        permissionLevel: user.permissionLevel,
+        token,
+      };
     } else {
       const user = await this.userModel.findOne({
         email: email,
@@ -91,7 +101,12 @@ export class AuthService {
         token: token,
       });
 
-      return { token };
+      return {
+        email: user.email,
+        name: user.name,
+        permissionLevel: user.permissionLevel,
+        token,
+      };
     }
   }
 }
