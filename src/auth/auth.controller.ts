@@ -11,6 +11,7 @@ import {
 } from '@nestjs/swagger';
 import { BadRequest } from '../helpres/swagger/bad-request';
 import { TokenResponse } from '../helpres/swagger/token-response';
+import { VerifyTokenDto } from './dto/verify.token.dto';
 
 @ApiTags('auth')
 @Controller('auth')
@@ -43,5 +44,19 @@ export class AuthController {
   })
   login(@Body() loginDto: LoginDto): Promise<{ token: string }> {
     return this.authService.login(loginDto);
+  }
+
+  @Post('/verify-token')
+  @ApiOperation({ summary: 'Verifica se o token é válido' })
+  @ApiOkResponse({
+    description: 'Token válido',
+    type: TokenResponse,
+  })
+  @ApiBadRequestResponse({
+    description: 'Token inválido',
+    type: BadRequest,
+  })
+  verifyToken(@Body() token: VerifyTokenDto): Promise<{ token: boolean }> {
+    return this.authService.verifyToken(token);
   }
 }

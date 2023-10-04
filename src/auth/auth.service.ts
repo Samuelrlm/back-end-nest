@@ -8,6 +8,7 @@ import { SignUpDto } from './dto/signup-dto';
 import { LoginDto } from './dto/login.dto';
 import { SessionUser } from '../schemas/session.user.schema';
 import { BlackList } from '../../src/schemas/black.list.schema';
+import { VerifyTokenDto } from './dto/verify.token.dto';
 
 @Injectable()
 export class AuthService {
@@ -108,5 +109,22 @@ export class AuthService {
         token,
       };
     }
+  }
+
+  async verifyToken(tokenDto: VerifyTokenDto): Promise<{ token: boolean }> {
+    const { token } = tokenDto;
+
+    const blackList = await this.blackListModel.findOne({ token });
+    const session = await this.sessionUserModel.findOne({ token });
+
+    if (blackList) {
+      return { token: false };
+    }
+
+    if (!session) {
+      return { token: false };
+    }
+
+    return { token: true };
   }
 }
