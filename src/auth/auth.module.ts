@@ -16,6 +16,7 @@ import { LoginMidleware } from '../middlewares/Auth/login-middleware';
 import { JwtStrategy } from './jwt.strategy';
 import { SessionUserSchema } from '../../src/schemas/session.user.schema';
 import { BlackListSchema } from '../../src/schemas/black.list.schema';
+import { MyGetway } from 'src/getway/getway';
 
 @Module({
   imports: [
@@ -38,7 +39,7 @@ import { BlackListSchema } from '../../src/schemas/black.list.schema';
     MongooseModule.forFeature([{ name: 'BlackList', schema: BlackListSchema }]),
   ],
   controllers: [AuthController],
-  providers: [AuthService, JwtStrategy],
+  providers: [AuthService, JwtStrategy, MyGetway],
   exports: [JwtStrategy, PassportModule],
 })
 export class AuthModule implements NestModule {
