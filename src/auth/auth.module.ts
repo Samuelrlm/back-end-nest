@@ -16,7 +16,7 @@ import { LoginMidleware } from '../middlewares/Auth/login-middleware';
 import { JwtStrategy } from './jwt.strategy';
 import { SessionUserSchema } from '../../src/schemas/session.user.schema';
 import { BlackListSchema } from '../../src/schemas/black.list.schema';
-import { MyGateway } from 'src/getway/gateway';
+import { MyGateway } from '../../src/getway/gateway';
 
 @Module({
   imports: [

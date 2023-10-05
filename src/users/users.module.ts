@@ -18,6 +18,7 @@ import { UpdatePasswordMidleWare } from '../middlewares/Users/update-password-mi
 import { BlackListMiddleware } from '../../src/middlewares/black-list-middleware';
 import { BlackListSchema } from '../../src/schemas/black.list.schema';
 import { SessionUserSchema } from '../schemas/session.user.schema';
+import { MyGateway } from '../getway/gateway';
 
 @Module({
   imports: [
@@ -29,7 +30,7 @@ import { SessionUserSchema } from '../schemas/session.user.schema';
     ]),
   ],
   controllers: [UsersController],
-  providers: [UsersService],
+  providers: [UsersService, MyGateway],
 })
 export class UsersModule implements NestModule {
   configure(consumer: MiddlewareConsumer) {

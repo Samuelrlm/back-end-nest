@@ -5,12 +5,14 @@ import mongoose from 'mongoose';
 import { Query } from 'express-serve-static-core';
 import * as bcrypt from 'bcryptjs';
 import { UpdatePasswordDto } from './dto/update-password-dto';
+import { MyGateway } from '../getway/gateway';
 
 @Injectable()
 export class UsersService {
   constructor(
     @InjectModel(User.name)
     private userModel: mongoose.Model<User>,
+    private readonly myGateway: MyGateway,
   ) {}
 
   async findAll(query: Query): Promise<User[]> {
@@ -68,11 +70,21 @@ export class UsersService {
     });
     const updatedUser = await this.userModel.findById(id);
 
+    const users = await this.userModel.find();
+
+    this.myGateway.emitUserList(users);
+
     return updatedUser;
   }
 
-  async delete(id: string): Promise<void> {
-    return await this.userModel.findByIdAndDelete(id);
+  async delete(id: string): Promise<any> {
+    await this.userModel.findByIdAndDelete(id);
+
+    const users = await this.userModel.find();
+
+    this.myGateway.emitUserList(users);
+
+    return { message: 'User deleted' };
   }
 
   async updatePassword(updatePasswordDto: UpdatePasswordDto): Promise<User> {
