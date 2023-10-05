@@ -9,7 +9,7 @@ import { LoginDto } from './dto/login.dto';
 import { SessionUser } from '../schemas/session.user.schema';
 import { BlackList } from '../../src/schemas/black.list.schema';
 import { VerifyTokenDto } from './dto/verify.token.dto';
-import { MyGetway } from '../getway/getway';
+import { MyGateway } from '../getway/gateway';
 
 @Injectable()
 export class AuthService {
@@ -18,7 +18,7 @@ export class AuthService {
     @InjectModel(SessionUser.name) private sessionUserModel: Model<SessionUser>,
     @InjectModel(BlackList.name) private blackListModel: Model<BlackList>,
     private jwtService: JwtService,
-    private readonly myGetway: MyGetway,
+    private readonly myGateway: MyGateway,
   ) {}
   async signUp(signUpDto: SignUpDto): Promise<{ token: string }> {
     const { name, email, password, permissionLevel } = signUpDto;
@@ -41,7 +41,7 @@ export class AuthService {
 
     const users = await this.userModel.find();
 
-    this.myGetway.emitUserList(users);
+    this.myGateway.emitUserList(users);
 
     return { token };
   }
