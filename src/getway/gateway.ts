@@ -19,6 +19,10 @@ export class MyGateway {
     this.server.emit('usersList', users);
   }
 
+  emitSesionUserList(users: any[]) {
+    this.server.emit('sessionUsersList', users);
+  }
+
   handleConnection(client: Socket) {
     console.log(`Client connected: ${client.id}`);
 

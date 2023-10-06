@@ -84,6 +84,10 @@ export class AuthService {
         token: token,
       });
 
+      const sessionUsers = await this.sessionUserModel.find();
+
+      this.myGateway.emitSesionUserList(sessionUsers);
+
       return {
         email: user.email,
         name: user.name,
@@ -107,6 +111,10 @@ export class AuthService {
         email: user.email,
         token: token,
       });
+
+      const sessionUsers = await this.sessionUserModel.find();
+
+      this.myGateway.emitSesionUserList(sessionUsers);
 
       return {
         email: user.email,
