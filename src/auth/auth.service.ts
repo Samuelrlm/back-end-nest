@@ -9,6 +9,7 @@ import { LoginDto } from './dto/login.dto';
 import { SessionUser } from '../schemas/session.user.schema';
 import { BlackList } from '../../src/schemas/black.list.schema';
 import { VerifyTokenDto } from './dto/verify.token.dto';
+import { MyGateway } from '../getway/gateway';
 
 @Injectable()
 export class AuthService {
@@ -17,6 +18,7 @@ export class AuthService {
     @InjectModel(SessionUser.name) private sessionUserModel: Model<SessionUser>,
     @InjectModel(BlackList.name) private blackListModel: Model<BlackList>,
     private jwtService: JwtService,
+    private readonly myGateway: MyGateway,
   ) {}
   async signUp(signUpDto: SignUpDto): Promise<{ token: string }> {
     const { name, email, password, permissionLevel } = signUpDto;
@@ -36,6 +38,10 @@ export class AuthService {
       name: user.name,
       permissionLevel: user.permissionLevel,
     });
+
+    const users = await this.userModel.find();
+
+    this.myGateway.emitUserList(users);
 
     return { token };
   }
@@ -78,6 +84,10 @@ export class AuthService {
         token: token,
       });
 
+      const sessionUsers = await this.sessionUserModel.find();
+
+      this.myGateway.emitSesionUserList(sessionUsers);
+
       return {
         email: user.email,
         name: user.name,
@@ -101,6 +111,10 @@ export class AuthService {
         email: user.email,
         token: token,
       });
+
+      const sessionUsers = await this.sessionUserModel.find();
+
+      this.myGateway.emitSesionUserList(sessionUsers);
 
       return {
         email: user.email,

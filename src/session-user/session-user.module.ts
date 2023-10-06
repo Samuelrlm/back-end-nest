@@ -17,9 +17,6 @@ import { LogoutMiddleware } from '../middlewares/SessionUser/logout-middleware';
 @Module({
   imports: [
     AuthModule,
-    MongooseModule.forFeature([
-      { name: 'SessionUser', schema: SessionUserSchema },
-    ]),
     MongooseModule.forFeature([{ name: 'BlackList', schema: BlackListSchema }]),
     MongooseModule.forFeature([
       { name: 'SessionUser', schema: SessionUserSchema },
