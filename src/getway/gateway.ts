@@ -2,7 +2,6 @@ import { InjectModel } from '@nestjs/mongoose';
 import { WebSocketGateway, WebSocketServer } from '@nestjs/websockets';
 import mongoose from 'mongoose';
 import { Server, Socket } from 'socket.io';
-import { SessionUser } from 'src/schemas/session.user.schema';
 import { User } from 'src/schemas/user.schema';
 
 @WebSocketGateway()
@@ -12,8 +11,6 @@ export class MyGateway {
   constructor(
     @InjectModel(User.name)
     private userModel: mongoose.Model<User>,
-    @InjectModel(SessionUser.name)
-    private sessionUserModel: mongoose.Model<SessionUser>,
   ) {}
 
   private users: any[] = [];
@@ -30,7 +27,7 @@ export class MyGateway {
     console.log(`Client connected: ${client.id}`);
 
     const usersList = this.userModel.find();
-    const sessionUsersList = this.sessionUserModel.find();
+    const sessionUsersList = this.userModel.find();
 
     usersList.then((users) => {
       this.users = users;
