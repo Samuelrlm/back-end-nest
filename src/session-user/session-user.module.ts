@@ -13,6 +13,7 @@ import { DeleteSessionUserMiddleware } from '../../src/middlewares/SessionUser/d
 import { BlackListSchema } from '../../src/schemas/black.list.schema';
 import { BlackListMiddleware } from '../../src/middlewares/black-list-middleware';
 import { LogoutMiddleware } from '../middlewares/SessionUser/logout-middleware';
+import { MyGateway } from 'src/getway/gateway';
 
 @Module({
   imports: [
@@ -25,7 +26,7 @@ import { LogoutMiddleware } from '../middlewares/SessionUser/logout-middleware';
       { name: 'SessionUser', schema: SessionUserSchema },
     ]),
   ],
-  providers: [SessionUserService],
+  providers: [SessionUserService, MyGateway],
   controllers: [SessionUserController],
 })
 export class SessionUserModule implements NestModule {
