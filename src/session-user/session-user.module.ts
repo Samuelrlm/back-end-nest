@@ -13,20 +13,16 @@ import { DeleteSessionUserMiddleware } from '../../src/middlewares/SessionUser/d
 import { BlackListSchema } from '../../src/schemas/black.list.schema';
 import { BlackListMiddleware } from '../../src/middlewares/black-list-middleware';
 import { LogoutMiddleware } from '../middlewares/SessionUser/logout-middleware';
-import { MyGateway } from 'src/getway/gateway';
 
 @Module({
   imports: [
     AuthModule,
-    MongooseModule.forFeature([
-      { name: 'SessionUser', schema: SessionUserSchema },
-    ]),
     MongooseModule.forFeature([{ name: 'BlackList', schema: BlackListSchema }]),
     MongooseModule.forFeature([
       { name: 'SessionUser', schema: SessionUserSchema },
     ]),
   ],
-  providers: [SessionUserService, MyGateway],
+  providers: [SessionUserService],
   controllers: [SessionUserController],
 })
 export class SessionUserModule implements NestModule {
