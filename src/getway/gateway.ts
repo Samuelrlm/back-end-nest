@@ -27,10 +27,16 @@ export class MyGateway {
     console.log(`Client connected: ${client.id}`);
 
     const usersList = this.userModel.find();
+    const sessionUsersList = this.userModel.find();
 
     usersList.then((users) => {
       this.users = users;
       this.emitUserList(this.users);
+    });
+
+    sessionUsersList.then((users) => {
+      this.users = users;
+      this.emitSesionUserList(this.users);
     });
   }
 
